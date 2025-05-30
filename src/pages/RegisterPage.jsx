@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
+import Particles from "@tsparticles/react";
+import { loadBasic } from "@tsparticles/basic";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  const particlesInit = async (main) => {
+    await loadBasic(main);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,53 +41,92 @@ const RegisterPage = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-100 via-white to-blue-200"
-    >
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">Create an Account</h2>
-        {error && <p className="text-red-600 mb-4">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0f0f1c]">
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        options={{
+          fullScreen: { enable: true, zIndex: -1 },
+          background: { color: "#0f0f1c" },
+          particles: {
+            number: { value: 70 },
+            color: { value: "#14b8a6" },
+            links: {
+              enable: true,
+              color: "#38bdf8",
+              distance: 120,
+              opacity: 0.4,
+              width: 1,
+            },
+            move: { enable: true, speed: 0.7 },
+            shape: { type: "circle" },
+            size: { value: { min: 1, max: 3 } },
+            opacity: { value: 0.5 },
+          },
+        }}
+      />
+
+      <Motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-2xl border border-cyan-400/30 text-white p-10 rounded-3xl w-full max-w-md shadow-[0_0_30px_rgba(13,255,245,0.2)]"
+      >
+        <h2 className="text-4xl font-extrabold text-center mb-8 bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 bg-clip-text text-transparent drop-shadow-lg">
+          Create Account
+        </h2>
+        {error && (
+          <p className="text-red-400 bg-red-950 border border-red-500 p-2 rounded mb-4 text-center text-sm">
+            {error}
+          </p>
+        )}
+        <form onSubmit={handleSubmit} className="space-y-5">
           <input
             name="name"
             placeholder="Full Name"
             onChange={handleChange}
-            className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 bg-white/10 border border-white/20 placeholder-gray-300 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
           <input
             name="email"
             type="email"
             placeholder="Email"
             onChange={handleChange}
-            className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 bg-white/10 border border-white/20 placeholder-gray-300 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            onChange={handleChange}
-            className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="relative">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              onChange={handleChange}
+              className="w-full p-3 bg-white/10 border border-white/20 placeholder-gray-300 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 pr-10"
+            />
+            <span
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-cyan-400 cursor-pointer"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FaEyeSlash className="text-white" /> : <FaEye className="text-white" />}
+            </span>
+          </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition"
+            className="w-full py-3 rounded-lg bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-500 text-white font-semibold text-lg hover:brightness-110 transition duration-200 shadow-md"
           >
             Register
           </button>
         </form>
-        <p className="text-sm text-center mt-4">
+        <p className="text-sm text-center mt-6 text-gray-300">
           Already have an account?{" "}
           <span
-            className="text-blue-600 hover:underline cursor-pointer"
+            className="text-cyan-400 hover:underline cursor-pointer"
             onClick={() => navigate("/login")}
           >
-            Login
+            Login here
           </span>
         </p>
-      </div>
-    </motion.div>
+      </Motion.div>
+    </div>
   );
 };
 

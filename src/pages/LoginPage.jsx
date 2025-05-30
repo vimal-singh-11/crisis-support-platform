@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import Particles from "@tsparticles/react";
 import { loadBasic } from "@tsparticles/basic";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const particlesInit = async (main) => {
@@ -65,7 +67,7 @@ const LoginPage = () => {
         }}
       />
 
-      <motion.div
+      <Motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -92,11 +94,17 @@ const LoginPage = () => {
           <div className="relative">
             <input
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               onChange={handleChange}
-              className="w-full p-3 bg-white/10 border border-white/20 placeholder-gray-300 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full p-3 bg-white/10 border border-white/20 placeholder-gray-300 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 pr-10"
             />
+            <span
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-cyan-400 cursor-pointer"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FaEyeSlash  className="text-white"/> : <FaEye className="text-white" />}
+            </span>
           </div>
           <button
             type="submit"
@@ -114,7 +122,7 @@ const LoginPage = () => {
             Register here
           </span>
         </p>
-      </motion.div>
+      </Motion.div>
     </div>
   );
 };
